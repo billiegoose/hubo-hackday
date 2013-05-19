@@ -29,9 +29,8 @@ $('.joint').on('change', function(event) {
 });
 
 jointRef.once('value', function(data) {
-    console.log(data);
-    data.forEach(function(item) {
-      console.log(item);
+    data.forEach(function(joint) {
+      $('#' + joint.name()).val(joint.val());
     });
 });
 
