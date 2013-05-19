@@ -30,6 +30,9 @@ $('.joint').on('change', function(event) {
 
 jointRef.once('value', function(data) {
     console.log(data);
+    data.forEach(function(item) {
+      console.log(item);
+    });
 });
 
 $('#email').on('click', function(data) {
