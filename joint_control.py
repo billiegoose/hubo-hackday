@@ -11,6 +11,14 @@ hubo = Hubo()
 jointmap = {"LSP":LSP, "RSP":RSP, "LEB":LEB, "REB":REB}
 hubo.updateState()
 ref = hubo.getState()
+
+# Inform nodejs what the current slider values should be
+print "LSP ",ref[LSP]
+print "RSP ",ref[RSP]
+print "LEB ",ref[LEB]
+print "REB ",ref[REB]
+sys.stdout.flush()
+
 while 1:
     line = sys.stdin.readline()
     if line == '\n':

@@ -76,6 +76,24 @@ app.get('/exit', function(req, res) {
 
 jointControl.stdout.on('data', function(data) {
     console.log('Joint Control: ' + data);
+    var lines = data.toString().split('\n');
+    for (i=0; i<lines.length; i++) {
+        line = lines[i].split(' ');
+        switch(line[0]) {
+            case "LSP":
+                console.log("OMG it's LSP=" + line[2]);
+                break;
+            case "RSP":
+                console.log("OMG it's RSP=" + line[2]);
+                break;
+            case "LEB":
+                console.log("OMG it's LEB=" + line[2]);
+                break;
+            case "REB":
+                console.log("OMG it's REB=" + line[2]);
+                break;
+        }
+    }
 });
 
 jointControl.on('exit', function(code) {
