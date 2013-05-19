@@ -27,3 +27,13 @@ $('.joint').on('change', function(event) {
     //    }
     //});
 });
+
+jointRef.once('value', function(data) {
+    console.log(data);
+});
+
+$('#email').on('click', function(data) {
+    $.ajax('/email/', {
+        type: 'PUT',
+    });
+});

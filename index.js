@@ -27,10 +27,10 @@ function sendEmail() {
         });
 
         email.addFile({
-            //filename: "image.jpeg",
-            //path: "./image.jpeg"
-            filename: "jawn.wav",
-            path: "./jawn.wav"
+            filename: "image.jpeg",
+            path: "./image.jpeg"
+            //filename: "jawn.wav",
+            //path: "./jawn.wav"
         });
 
         sg.send(email, function(success, message) {
@@ -63,6 +63,11 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
+app.put('/email', function(req, res) {
+    sendEmail();
+    res.send(200);
+});
+
 app.put('/joints/:id', function(req, res) {
     var jointId = req.params.id.toUpperCase();
     var jointValue = parseInt(req.body['newValue']) / 100;
@@ -78,6 +83,28 @@ app.get('/exit', function(req, res) {
 
 jointControl.stdout.on('data', function(data) {
     console.log('Joint Control: ' + data);
+    var lines = data.toString().split('\n');
+    for (i=0; i<lines.length; i++) {
+        line = lines[i].split(' ');
+        switch(line[0]) {
+            case "LSP":
+                console.log("OMG it's LSP=" + line[2]);
+                jointRef.child("LSP").set(String(line[2])*100);
+                break;
+            case "RSP":
+                console.log("OMG it's RSP=" + line[2]);
+                jointRef.child("RSP").set(String(line[2])*100);
+                break;
+            case "LEB":
+                console.log("OMG it's LEB=" + line[2]);
+                jointRef.child("LEB").set(String(line[2])*100);
+                break;
+            case "REB":
+                console.log("OMG it's REB=" + line[2]);
+                jointRef.child("REB").set(String(line[2])*100);
+                break;
+        }
+    }
 });
 
 jointControl.on('exit', function(code) {
@@ -91,8 +118,8 @@ var jointRef = huboRef.child('joints');
 jointRef.on('child_changed', function(snapshot) {
   var jointId = snapshot.name(),
       jointValue = snapshot.val();
-
-  jointControl.stdin.write(jointId + ' ' + jointValue + '\n'); 
+  console.log('jointId: ' + jointId + ', jointValue: ' + jointValue);
+  jointControl.stdin.write(jointId + ' ' + jointValue/100 + '\n'); 
 });
 
 
