@@ -16,6 +16,7 @@ session.addEventListener('streamCreated', function(e) {
 function addStreams(streams) {
   for (var i = 0; i < streams.length; i++) {
     var stream = streams[i];
+    if (stream.connection.connectionId === session.connection.connectionId) return;
     session.subscribe(stream, 'subscriber');
   }
 }
