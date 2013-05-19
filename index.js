@@ -7,7 +7,7 @@ function sendEmail() {
     streamer.on('close', function (code) {
 
         if (code != 0) {
-            console.log('Hahaha');
+            console.log('streamer exit code:' + code.toString());
             return;
         }
 
@@ -23,7 +23,7 @@ function sendEmail() {
             to: 'wmhilton@gmail.com',
             from: 'asdfasfasfasf@adfsdf.com',
             subject: 'hi from hubo',
-            text: 'i hate you'
+            text: 'Here is a picture!'
         });
 
         email.addFile({
@@ -88,19 +88,19 @@ jointControl.stdout.on('data', function(data) {
         line = lines[i].split(' ');
         switch(line[0]) {
             case "LSP":
-                console.log("OMG it's LSP=" + line[2]);
+                console.log("Initial LSP=" + line[2]);
                 jointRef.child("LSP").set(String(line[2])*100);
                 break;
             case "RSP":
-                console.log("OMG it's RSP=" + line[2]);
+                console.log("Initial RSP=" + line[2]);
                 jointRef.child("RSP").set(String(line[2])*100);
                 break;
             case "LEB":
-                console.log("OMG it's LEB=" + line[2]);
+                console.log("Initial LEB=" + line[2]);
                 jointRef.child("LEB").set(String(line[2])*100);
                 break;
             case "REB":
-                console.log("OMG it's REB=" + line[2]);
+                console.log("Initial REB=" + line[2]);
                 jointRef.child("REB").set(String(line[2])*100);
                 break;
         }
