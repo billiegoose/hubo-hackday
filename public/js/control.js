@@ -10,7 +10,7 @@ jointRef.on('child_changed', function(snapshot) {
 });
 
 $('.joint').on('change', function(event) {
-    var jointId = event.target.id.toLowerCase();
+    var jointId = event.target.id;
     console.log(jointId + ': ' + event.target.value);
 
     jointRef.child(jointId).set(event.target.value);
@@ -26,4 +26,14 @@ $('.joint').on('change', function(event) {
     //        // yay!
     //    }
     //});
+});
+
+jointRef.once('value', function(data) {
+    console.log(data);
+});
+
+$('#email').on('click', function(data) {
+    $.ajax('/email/', {
+        type: 'PUT',
+    });
 });
