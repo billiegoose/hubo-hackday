@@ -47,6 +47,7 @@ var http = require('http');
 var express = require('express');
 var path = require('path');
 var util = require('util');
+var Firebase = require('firebase');
 
 var app = express();
 var jointControl = spawn('python', ['joint_control.py']);
@@ -66,7 +67,8 @@ app.put('/joints/:id', function(req, res) {
     var jointId = req.params.id.toUpperCase();
     var jointValue = parseInt(req.body['newValue']) / 100;
     console.log('setting joint id ' + jointId + ' to value ' + jointValue);
-    jointControl.stdin.write(jointId + ' ' + jointValue + '\n'); 
+    jointRef.child(jointId).set(jointValue);
+    //jointControl.stdin.write(jointId + ' ' + jointValue + '\n'); 
     res.send(200);
 });
 
@@ -81,6 +83,18 @@ jointControl.stdout.on('data', function(data) {
 jointControl.on('exit', function(code) {
     console.log('Joint Control exited with code ' + code);
 });
+
+// initializing firebase
+var huboRef = new Firebase('https://hubo-firebase.firebaseIO.com');
+var jointRef = huboRef.child('joints');
+
+jointRef.on('child_changed', function(snapshot) {
+  var jointId = snapshot.name(),
+      jointValue = snapshot.val();
+
+  jointControl.stdin.write(jointId + ' ' + jointValue + '\n'); 
+});
+
 
 
 var server = http.createServer(app);
